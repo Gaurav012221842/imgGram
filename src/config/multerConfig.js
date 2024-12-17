@@ -6,9 +6,10 @@ export const s3uploader=multer({
     storage: multerS3({
         s3: s3,
         bucket:AWS_BUCKET_NAME,
-        
+       
         key: function (req,file,cb){
             console.log(file);
+            console.log(req.body);
             const uniqueSuffix=Date.now()+'-'+Math.round(Math.random()*1e9);
             cb(null, file.fieldname+ '-' + uniqueSuffix + '.' + file.mimetype.split("/")[1]);
 
