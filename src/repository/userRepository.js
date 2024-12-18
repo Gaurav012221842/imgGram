@@ -29,3 +29,19 @@ export const createUser=async (user) => {
         
     }
 };
+export const signedIn = async(user) => {
+    try {
+        const foundUser = await User.findOne({ email: user.email });
+        if (!foundUser) {
+            throw new Error('User not found');
+        }
+        const isPasswordValid = await foundUser.isPasswordValid(user.password);
+        if (!isPasswordValid) {
+            throw new Error('Invalid password');
+        }
+        return foundUser;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
