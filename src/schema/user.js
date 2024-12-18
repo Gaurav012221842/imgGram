@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 const userSchema = new mongoose.Schema({
     username:{
         type: String,
@@ -20,14 +21,22 @@ const userSchema = new mongoose.Schema({
     password:{
         type: String,
         required: true,
-        minLength:8,
-        validate:{
-            validator: (password) => {
-                return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
-            },
-            message: 'Password must contain at least 8 characters, including uppercase letters, lowercase letters, numbers and special characters'
-        }
+        minLength:5,
+        // validate:{
+        //     validator: (password) => {
+        //         return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
+        //     },
+        //     message: 'Password must contain at least 8 characters, including uppercase letters, lowercase letters, numbers and special characters'
+        // }
     }
 },{timestamps:true});
+userSchema.pre('save', function modifyPassword(next){
+    const user =this;
+    const SALT=bcrypt.genSaltSync(9);
+    const hashedPassword=bcrypt.hashSync(user.password, SALT);
+    user.password=hashedPassword;
+
+    next();
+});
 const user=mongoose.model('User', userSchema);
 export default user;
