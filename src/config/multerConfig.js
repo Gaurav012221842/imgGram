@@ -10,6 +10,12 @@ export const s3uploader=multer({
         key: function (req,file,cb){
             console.log(file);
             console.log(req.body);
+            //Check mimetype
+            if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+                cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.split("/")[1]);
+            }else{
+                cb(new Error('Only image files are allowed!'), false);
+                }
             const uniqueSuffix=Date.now()+'-'+Math.round(Math.random()*1e9);
             cb(null, file.fieldname+ '-' + uniqueSuffix + '.' + file.mimetype.split("/")[1]);
 

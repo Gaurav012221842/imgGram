@@ -1,4 +1,2 @@
 node_modules/
-.env
-src/config/serverConfig.js
-src/config/serverConfig.js
+.env 
