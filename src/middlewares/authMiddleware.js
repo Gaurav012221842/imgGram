@@ -1,4 +1,4 @@
-import { checkIfUserExists } from "../service/userService.js";
+import { checkIfUserExists } from "../services/userService.js";
 import { verifyJWT } from "../utils/jwt.js";
 
 export const isAuthenticated = async (req, res, next) => {

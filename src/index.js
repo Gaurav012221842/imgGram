@@ -1,19 +1,29 @@
 import express from 'express';
 import connectDB from './config/dbConfig.js';
-import apiRouter from './router/apiRouter.js' 
-import { isAuthenticated } from './middleware/authMiddleware.js';
-const app=express(); 
+import apiRouter from './routers/apiRouter.js';
+import multer from 'multer';
+import { isAuthenticated } from './middlewares/authMiddleware.js';
+
+const PORT = 3000; // port number
+
+const app = express(); // create express app server instance
+
+const upload = multer();
+
 app.use(express.json());
 app.use(express.text());
- app.use(express.urlencoded({ extended: true }));  //for uploading image in post request
-   //for uploading image in post request'));  //for uploading image in post request
-app.use('/api',apiRouter);  //for using api routes
-app.get('/ping',isAuthenticated,(req,res)=>{
-        console.log(req.query);
-        console.log(req.body);
-        console.log(req.user);
-        return res.json({message: 'Pong'});
+app.use(express.urlencoded());
+
+app.use('/api', apiRouter);// If the url starts with /api then the request is forwarded to the apiRouter
+
+app.get('/ping', isAuthenticated, (req, res) => {
+    console.log(req.query);
+    console.log(req.body);
+    console.log(req.user);
+    return res.json({ message: 'pong' });
 });
-app.listen(3000, () =>{ console.log('Server running on port 3000')
-        connectDB();
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    connectDB();
 });
