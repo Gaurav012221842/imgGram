@@ -38,3 +38,13 @@ export const signInUserServices = async (userDetails) => {
         throw error;
     }
 };
+
+export const checkIfUserExists = (email) => { 
+    try{
+        const user = findUserByEmail(email);
+        return user? true : false;
+    }
+    catch(error){ 
+        return false;
+    }
+};
